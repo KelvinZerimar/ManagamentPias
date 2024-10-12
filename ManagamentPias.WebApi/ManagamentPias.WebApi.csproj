@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ManagamentPias.Infra.Persistence\ManagamentPias.Infra.Persistence.csproj" />
+    <ProjectReference Include="..\ManagamentPias.Infra.Shared\ManagamentPias.Infra.Shared.csproj" />
   </ItemGroup>
 
 </Project>

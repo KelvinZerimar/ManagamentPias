@@ -1,6 +1,0 @@
-@ManagamentPias.WebApi_HostAddress = http://localhost:5015
-
-GET {{ManagamentPias.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
