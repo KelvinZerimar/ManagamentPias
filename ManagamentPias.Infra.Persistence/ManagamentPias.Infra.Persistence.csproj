@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ManagamentPias.App\ManagamentPias.App.csproj" />
+    <ProjectReference Include="..\ManagamentPias.Domain\ManagamentPias.Domain.csproj" />
+    <ProjectReference Include="..\ManagamentPias.Infra.Shared\ManagamentPias.Infra.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
