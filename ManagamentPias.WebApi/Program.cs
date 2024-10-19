@@ -1,6 +1,16 @@
+using ManagamentPias.Infra.Persistence;
+using ManagamentPias.Infra.Persistence.Contexts;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// load up serilog configuraton
+Log.Information("Application startup services registration");
+
+// Add configuration to the DI container
+builder.Services.AddSingleton(builder.Configuration);
+builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 
 // Add services to the container.
 
@@ -18,22 +28,32 @@ builder.Services.AddApiVersioning(config =>
     // Advertise the API versions supported for the particular endpoint
     config.ReportApiVersions = true;
 });
-// TODO : Add configuration to the DI container
-//builder.Services.AddSingleton(builder.Configuration);
-
-//builder.Services.AddApplicationLayer();
-//builder.Services.AddPersistenceInfrastructure(builder.Configuration);
-//builder.Services.AddSharedInfrastructure(builder.Configuration);
-//builder.Services.AddSwaggerExtension();
-//builder.Services.AddControllersExtension();
 
 var app = builder.Build();
+
+Log.Information("Application startup middleware registration");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseDeveloperExceptionPage();
+
+    // for quick database (usually for prototype)
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        // use context
+        dbContext.Database.EnsureCreated();
+    }
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+
 }
 
 app.UseHttpsRedirection();
