@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ManagamentPias.App.Features.Assets.Queries.GetAssets;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ManagamentPias.WebApi.Controllers.v1;
 
@@ -16,9 +17,8 @@ public class AssetsController : BaseApiController
     /// <param name="filter"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult> Get([FromQuery] object filter)
+    public async Task<ActionResult> Get([FromQuery] GetAssetsQuery filter)
     {
-        return Ok();
+        return Ok(await Mediator.Send(filter));
     }
-
 }
