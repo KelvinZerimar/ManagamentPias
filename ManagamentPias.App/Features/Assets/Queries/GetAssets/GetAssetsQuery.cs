@@ -38,9 +38,9 @@ public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable
                 validFilter.Fields = _modelHelper.GetModelFields<GetAssetsViewModel>();
             }
             // query based on filter
-            var entityCustomers = await _assetRepository.GetPagedAssetReponseAsync(validFilter);
-            var data = entityCustomers.data;
-            RecordsCount recordCount = entityCustomers.recordsCount;
+            var entityAssets = await _assetRepository.GetPagedAssetReponseAsync(validFilter);
+            var data = entityAssets.data;
+            RecordsCount recordCount = entityAssets.recordsCount;
             // response wrapper
             return new PagedResponse<IEnumerable<Entity>>(data, validFilter.PageNumber, validFilter.PageSize, recordCount);
         }

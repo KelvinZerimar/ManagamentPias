@@ -96,7 +96,7 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
         return (shapeData, recordsCount);
     }
 
-    private void FilterByColumn(ref IQueryable<Asset> query, string description)
+    private void FilterByColumn(ref IQueryable<Asset> query, string? description)
     {
         if (!query.Any())
             return;

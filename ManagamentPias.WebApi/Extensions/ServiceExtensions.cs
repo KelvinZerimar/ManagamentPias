@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 
@@ -83,7 +83,7 @@ public static class ServiceExtensions
 
     //public static void AddVersionedApiExplorerExtension(this IServiceCollection services)
     //{
-    //    services.adver AddVersionedApiExplorer(o =>
+    //    services.AddVersionedApiExplorer(o =>
     //    {
     //        o.GroupNameFormat = "'v'VVV";
     //        o.SubstituteApiVersionInUrl = true;
@@ -99,6 +99,10 @@ public static class ServiceExtensions
             config.AssumeDefaultVersionWhenUnspecified = true;
             // Advertise the API versions supported for the particular endpoint
             config.ReportApiVersions = true;
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
         });
     }
     //public static void AddJWTAuthentication(this IServiceCollection services, IConfiguration configuration)
