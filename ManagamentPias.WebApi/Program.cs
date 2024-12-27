@@ -1,6 +1,7 @@
 using ManagamentPias.App;
 using ManagamentPias.Infra.Persistence;
 using ManagamentPias.Infra.Persistence.Contexts;
+using ManagamentPias.Infra.Shared;
 using ManagamentPias.WebApi.Extensions;
 using ManagamentPias.WebApi.Options;
 using Serilog;
@@ -14,6 +15,7 @@ builder.Services.AddSingleton(builder.Configuration);
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 builder.Services.AddApplicationLayer();
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerExtension();
 builder.Services.AddControllersExtension();
 

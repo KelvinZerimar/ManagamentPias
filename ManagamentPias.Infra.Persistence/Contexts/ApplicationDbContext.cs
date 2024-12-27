@@ -14,17 +14,16 @@ public class ApplicationDbContext : DbContext
     private readonly ILoggerFactory _loggerFactory;
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
-            //,IDateTimeService dateTime,
-            //ILoggerFactory loggerFactory
+            , IDateTimeService dateTime
+            , ILoggerFactory loggerFactory
             ) : base(options)
     {
         ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        //_dateTime = dateTime;
-        //_loggerFactory = loggerFactory;
+        _dateTime = dateTime;
+        _loggerFactory = loggerFactory;
     }
 
     public DbSet<Asset> Assets => Set<Asset>();
-    public DbSet<Portfolio> Portfolios => Set<Portfolio>();
     public DbSet<Rating> Ratings => Set<Rating>();
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -49,13 +48,10 @@ public class ApplicationDbContext : DbContext
     {
         // Generate seed data with Bogus
         var databaseSeeder = new DatabaseSeeder();
-        // Apply the seed data on the tables
-        modelBuilder.Entity<Portfolio>().HasData(databaseSeeder.Portfolio);
 
         // Configure the tables for the Warehouse
         modelBuilder.ApplyConfiguration(new RatingConfiguration());
         modelBuilder.ApplyConfiguration(new AssetConfiguration());
-        modelBuilder.ApplyConfiguration(new PortfolioConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
@@ -73,12 +69,7 @@ internal class AssetConfiguration : IEntityTypeConfiguration<Asset>
     {
         builder.ToTable("Assets");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.ValuePatrimony).IsRequired().HasPrecision(12, 2);
         builder.Property(x => x.NumUnit).IsRequired();
-
-        builder.HasOne(b => b.Rating)
-            .WithMany()
-            .HasForeignKey(x => x.RatingId);
     }
 }
 
@@ -90,19 +81,5 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Valuation).IsRequired().HasPrecision(12, 2);
         builder.Property(x => x.DateSituation).IsRequired();
-        builder.HasOne(x => x.Portfolio)
-            .WithMany()
-            .HasForeignKey(x => x.PortfolioId);
-    }
-}
-
-internal class PortfolioConfiguration : IEntityTypeConfiguration<Portfolio>
-{
-    public void Configure(EntityTypeBuilder<Portfolio> builder)
-    {
-        builder.ToTable("Portfolios");
-
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Description).IsRequired();
     }
 }

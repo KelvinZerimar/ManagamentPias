@@ -39,7 +39,10 @@ public class ModelHelper : IModelHelper
         var bindingFlags = System.Reflection.BindingFlags.Instance |
                             System.Reflection.BindingFlags.NonPublic |
                             System.Reflection.BindingFlags.Public;
-        var listFields = typeof(T).GetProperties(bindingFlags).Select(f => f.Name).ToList();
+        var listFields = typeof(T).GetProperties(bindingFlags)
+                                  .Where(f => !string.Equals(f.Name, "ValuePatrimony", StringComparison.OrdinalIgnoreCase)) // TODO: Reemplazar propiedad hardcodeada
+                                  .Select(f => f.Name)
+                                  .ToList();
 
         foreach (string field in listFields)
         {
