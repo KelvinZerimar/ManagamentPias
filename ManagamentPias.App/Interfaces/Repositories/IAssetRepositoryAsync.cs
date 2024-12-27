@@ -6,5 +6,6 @@ namespace ManagamentPias.App.Interfaces.Repositories;
 
 public interface IAssetRepositoryAsync : IGenericRepositoryAsync<Asset>
 {
-    Task<(IEnumerable<Entity> data, RecordsCount recordsCount)> GetPagedAssetReponseAsync(GetAssetsQuery requestParameters);
+    Task<(IEnumerable<AssetDetailsDto> data, RecordsCount recordsCount)> GetPagedAssetReponseAsync(GetAssetsQuery requestParameters);
+    Task<IEnumerable<Asset>> GetAssetByDateSituationAsync();
 }
