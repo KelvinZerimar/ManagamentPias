@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ManagamentPias.WebApi.Controllers.v1;
 [ApiVersion("1.0")]
-public class RatingController : BaseApiController
+public class RatingsController : BaseApiController
 {
 
-    public RatingController()
+    public RatingsController()
     {
 
     }

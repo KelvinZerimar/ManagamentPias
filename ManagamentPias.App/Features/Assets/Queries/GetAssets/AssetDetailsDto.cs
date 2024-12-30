@@ -6,4 +6,5 @@ public record AssetDetailsDto
     public decimal ValuePatrimony { get; set; }
     public decimal NumUnit { get; set; }
     public decimal ValuationRating { get; set; }
+    public decimal? Percentage { get; set; } = null;
 }

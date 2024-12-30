@@ -13,12 +13,14 @@ public class GetCurrentAssetsQuery : IRequest<Response<IEnumerable<AssetDetailsD
         public async Task<Response<IEnumerable<AssetDetailsDto>>> Handle(GetCurrentAssetsQuery request, CancellationToken cancellationToken)
         {
             var resultData = await assetRepository.GetAssetByDateSituationAsync();
+            var sum = resultData.Sum(a => a.ValuePatrimony);
             var shapeData = resultData.Select(rd => new AssetDetailsDto()
             {
                 Description = rd.Rating.Portfolio.GetDescription(),
                 ValuePatrimony = rd.ValuePatrimony,
                 NumUnit = rd.NumUnit,
-                ValuationRating = rd.Rating.Valuation
+                ValuationRating = rd.Rating.Valuation,
+                Percentage = sum == 0 ? 0 : Math.Round((rd.ValuePatrimony / sum) * 100, 2)
             }).OrderByDescending(a => a.ValuePatrimony);
 
             return await Task.FromResult(new Response<IEnumerable<AssetDetailsDto>>(shapeData));
