@@ -14,13 +14,12 @@ builder.Services.AddSingleton(builder.Configuration);
 
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 builder.Services.AddApplicationLayer();
-builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddPersistenceInfrastructure();
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerExtension();
 builder.Services.AddControllersExtension();
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();

@@ -17,9 +17,4 @@
     <ProjectReference Include="..\ManagamentPias.Domain\ManagamentPias.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Notes\Commands\CreateNote\" />
-    <Folder Include="Features\Notes\Queries\GetNotes\" />
-  </ItemGroup>
-
 </Project>

@@ -5,7 +5,9 @@ namespace ManagamentPias.WebApi.Options;
 
 public class DatabaseOptionsSetup : IConfigureOptions<DatabaseOptions>
 {
+    private const string DefaultConnection = "DefaultConnection";
     private const string ConfigurationSectionName = "DatabaseOptions";
+    private readonly string CosmosDb = "CosmosDb";
     private readonly IConfiguration _configuration;
 
     public DatabaseOptionsSetup(IConfiguration configuration)
@@ -14,10 +16,11 @@ public class DatabaseOptionsSetup : IConfigureOptions<DatabaseOptions>
     }
     public void Configure(DatabaseOptions options)
     {
-        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        var connectionString = _configuration.GetConnectionString(DefaultConnection);
 
         options.ConnectionString = connectionString ?? throw new Exception();
 
         _configuration.GetSection(ConfigurationSectionName).Bind(options);
+        _configuration.GetSection(CosmosDb).Bind(options);
     }
 }
