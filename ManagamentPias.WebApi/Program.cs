@@ -2,6 +2,7 @@ using ManagamentPias.App;
 using ManagamentPias.Infra.Persistence;
 using ManagamentPias.Infra.Persistence.Contexts;
 using ManagamentPias.Infra.Shared;
+using ManagamentPias.Infra.Shared.Authentication.Settings;
 using ManagamentPias.WebApi.Extensions;
 using ManagamentPias.WebApi.Options;
 using Serilog;
@@ -27,11 +28,14 @@ builder.Services.AddSwaggerGen();
 // CORS
 builder.Services.AddCorsExtension();
 builder.Services.AddHealthChecks();
+//API Security
+builder.Services.AddJWTAuthentication(builder.Configuration.GetMyOptions<AuthenticationSettings>());
 // API version
 builder.Services.AddApiVersioningExtension();
+// Add authentication
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
-
 Log.Information("Application startup middleware registration");
 
 // Configure the HTTP request pipeline.
@@ -58,7 +62,7 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

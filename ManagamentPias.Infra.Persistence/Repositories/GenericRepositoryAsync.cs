@@ -20,7 +20,7 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : cl
         return await _dbContext.Set<T>().FindAsync(id) ?? throw new ApiException($"Not Found.");
     }
 
-    public async Task<IEnumerable<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<T>> GetPagedResponseAsync(int pageNumber, int pageSize)
     {
         return await _dbContext
             .Set<T>()
@@ -30,7 +30,7 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : cl
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<T>> GetPagedAdvancedReponseAsync(int pageNumber, int pageSize, string orderBy, string fields)
+    public async Task<IEnumerable<T>> GetPagedAdvancedResponseAsync(int pageNumber, int pageSize, string orderBy, string fields)
     {
         return await _dbContext
             .Set<T>()

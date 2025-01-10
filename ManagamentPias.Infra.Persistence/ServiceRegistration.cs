@@ -42,7 +42,7 @@ namespace ManagamentPias.Infra.Persistence
                     }
                 };
 
-                AppContext.SetSwitch("AzureCosmosDisableNewtonsoftJsonCheck", true);
+                AppContext.SetSwitch("AzureCosmosDisableNewtonSoftJsonCheck", true);
                 return new CosmosClient(databaseOptions.Account, databaseOptions.Key, options);
             });
 
@@ -58,7 +58,17 @@ namespace ManagamentPias.Infra.Persistence
                 return new CosmosNoteRepository(
                     cosmosClient,
                     databaseOptions.DatabaseName,
-                    databaseOptions.ContainerName
+                    databaseOptions.ContainerNotes
+                );
+            });
+            services.AddSingleton<IUserRepository>(s =>
+            {
+                var cosmosClient = s.GetRequiredService<CosmosClient>();
+                var databaseOptions = s.GetService<IOptions<DatabaseOptions>>()!.Value;
+                return new UserRepositoryAsync(
+                    cosmosClient,
+                    databaseOptions.DatabaseName,
+                    databaseOptions.ContainerUsers
                 );
             });
             #endregion Repositories

@@ -1,5 +1,12 @@
 ﻿using Asp.Versioning;
+using ManagamentPias.App.Common.Services;
+using ManagamentPias.Infra.Shared.Authentication.Settings;
+using ManagamentPias.Infra.Shared.Services;
+using ManagamentPias.WebApi.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 
 namespace ManagamentPias.WebApi.Extensions;
@@ -23,31 +30,31 @@ public static class ServiceExtensions
                     Url = new Uri("https://kramirez.com"),
                 }
             });
-            //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            //{
-            //    Name = "Authorization",
-            //    In = ParameterLocation.Header,
-            //    Type = SecuritySchemeType.ApiKey,
-            //    Scheme = "Bearer",
-            //    BearerFormat = "JWT",
-            //    Description = "Input your Bearer token in this format - Bearer {your token here} to access this API",
-            //});
-            //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //    {
-            //        {
-            //            new OpenApiSecurityScheme
-            //            {
-            //                Reference = new OpenApiReference
-            //                {
-            //                    Type = ReferenceType.SecurityScheme,
-            //                    Id = "Bearer",
-            //                },
-            //                Scheme = "Bearer",
-            //                Name = "Bearer",
-            //                In = ParameterLocation.Header,
-            //            }, new List<string>()
-            //        },
-            //    });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                Description = "Input your Bearer token in this format - Bearer {your token here} to access this API",
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer",
+                            },
+                            Scheme = "Bearer",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        }, new List<string>()
+                    },
+                });
         });
     }
 
@@ -105,16 +112,55 @@ public static class ServiceExtensions
             options.SubstituteApiVersionInUrl = true;
         });
     }
-    //public static void AddJWTAuthentication(this IServiceCollection services, IConfiguration configuration)
-    //{
-    //    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    //        .AddJwtBearer(options =>
-    //        {
-    //            options.RequireHttpsMetadata = false;
-    //            options.Authority = configuration["Sts:ServerUrl"];
-    //            options.Audience = configuration["Sts:Audience"];
-    //        });
-    //}
+
+    public static void AddJWTAuthentication(this IServiceCollection services, AuthenticationSettings authSettings)
+    {
+        // Prevents the mapping of sub claim into archaic SOAP NameIdentifier.
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+#if DEBUG
+                options.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = ctx =>
+                    {
+                        // Break here to debug JWT authentication.
+                        return Task.FromResult(true);
+                    }
+                };
+#endif
+
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = authSettings.JwtIssuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = authSettings.JwtIssuer,
+
+                    // Validate signing key instead of asking authority if signing is valid,
+                    // since we're skipping on separate identity provider for the purpose of this simple showcase API.
+                    // For the same reason we're using symmetric key, while in case of a separate identity provider - even if we wanted local key validation - we'd have only the public key of a public/private keypair.
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(authSettings.JwtSigningKey),
+                    ClockSkew = TimeSpan.FromMinutes(5),
+
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                };
+            });
+    }
+
     //public static void AddAuthorizationPolicies(this IServiceCollection services, IConfiguration configuration)
     //{
     //    string admin = configuration["ApiRoles:AdminRole"],
@@ -127,5 +173,11 @@ public static class ServiceExtensions
     //        options.AddPolicy(AuthorizationConsts.EmployeePolicy, policy => policy.RequireRole(employee, manager, admin));
     //    });
     //}
-
+    public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Core
+        services.AddScoped<ITokenService, JwtTokenService>();
+        services.RegisterMyOptions<AuthenticationSettings>();
+        //ConfigureLocalJwtAuthentication(services, configuration.GetMyOptions<AuthenticationSettings>());
+    }
 }
