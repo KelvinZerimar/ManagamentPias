@@ -4,6 +4,7 @@ using ManagamentPias.App.Interfaces;
 using ManagamentPias.App.Interfaces.Repositories;
 using ManagamentPias.App.Parameters;
 using ManagamentPias.Domain.Entities;
+using ManagamentPias.Domain.Enums;
 using ManagamentPias.Infra.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,17 +25,8 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
         _dataShaper = dataShaper;
     }
 
-    public Task<bool> Create(Asset asset)
-    {
-        throw new NotImplementedException();
-    }
 
-    public Task<Asset> GetAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<(IEnumerable<Entity> data, RecordsCount recordsCount)> GetPagedAssetReponseAsync(GetAssetsQuery requestParameters)
+    public async Task<(IEnumerable<AssetDetailsDto> data, RecordsCount recordsCount)> GetPagedAssetReponseAsync(GetAssetsQuery requestParameters)
     {
         var description = requestParameters.Description;
 
@@ -72,14 +64,13 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
             result = result.OrderBy(orderBy);
         }
         // projection
-        result = result.Include(asset => asset.Rating).ThenInclude(rating => rating.Portfolio);
+        result = result.Include(asset => asset.Rating); //.ThenInclude(rating => rating.Portfolio);
 
         // select columns
         if (!string.IsNullOrWhiteSpace(fields))
         {
             result = result.Select<Asset>("new(" + fields + ")");
         }
-
 
         // paging
         result = result
@@ -89,14 +80,19 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
         // retrieve data to list
         var resultData = await result.ToListAsync();
 
-
         // shape data
-        var shapeData = _dataShaper.ShapeData(resultData, fields);
+        var shapeData = resultData.Select(rd => new AssetDetailsDto()
+        {
+            Description = rd.Rating.Portfolio.GetDescription(),
+            ValuePatrimony = rd.ValuePatrimony,
+            NumUnit = rd.NumUnit,
+            ValuationRating = rd.Rating.Valuation
+        }).OrderByDescending(a => a.ValuePatrimony); //_dataShaper.ShapeData(resultData, fields);
 
         return (shapeData, recordsCount);
     }
 
-    private void FilterByColumn(ref IQueryable<Asset> query, string description)
+    private void FilterByColumn(ref IQueryable<Asset> query, string? description)
     {
         if (!query.Any())
             return;
@@ -107,8 +103,24 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
         var predicate = PredicateBuilder.New<Asset>();
 
         if (!string.IsNullOrEmpty(description))
-            predicate = predicate.Or(p => p.Rating.Portfolio.Description.Contains(description.Trim()));
+            predicate = predicate.Or(p => p.Rating.Portfolio.GetDescription().Contains(description.Trim()));
 
         query = query.Where(predicate);
+    }
+
+    public async Task<IEnumerable<Asset>> GetAssetByDateSituationAsync()
+    {
+        var result = _repository
+            .AsNoTracking()
+            .AsExpandable();
+
+        var dateSituation = _repository.Max(asset => asset.Rating.DateSituation);
+        var shortDate = dateSituation.Date;
+
+        result = result
+            .Include(asset => asset.Rating)
+            .Where(asset => asset.Rating.DateSituation.Date == shortDate);
+        var resultData = await result.ToListAsync();
+        return resultData;
     }
 }

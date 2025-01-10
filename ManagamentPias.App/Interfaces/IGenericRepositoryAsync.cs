@@ -6,9 +6,9 @@ public interface IGenericRepositoryAsync<T> where T : class
 
     Task<IEnumerable<T>> GetAllAsync();
 
-    Task<IEnumerable<T>> GetPagedReponseAsync(int pageNumber, int pageSize);
+    Task<IEnumerable<T>> GetPagedResponseAsync(int pageNumber, int pageSize);
 
-    Task<IEnumerable<T>> GetPagedAdvancedReponseAsync(int pageNumber, int pageSize, string orderBy, string fields);
+    Task<IEnumerable<T>> GetPagedAdvancedResponseAsync(int pageNumber, int pageSize, string orderBy, string fields);
 
     Task<T> AddAsync(T entity);
 

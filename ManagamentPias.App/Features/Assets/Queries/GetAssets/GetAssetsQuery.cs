@@ -2,16 +2,15 @@
 using ManagamentPias.App.Interfaces.Repositories;
 using ManagamentPias.App.Parameters;
 using ManagamentPias.App.Wrappers;
-using ManagamentPias.Domain.Entities;
 using MediatR;
 
 namespace ManagamentPias.App.Features.Assets.Queries.GetAssets;
 
-public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable<Entity>>>
+public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable<AssetDetailsDto>>>
 {
     public string? Description { get; set; } = null;
 
-    public class GetAssetsQueryHandler : IRequestHandler<GetAssetsQuery, PagedResponse<IEnumerable<Entity>>>
+    public class GetAssetsQueryHandler : IRequestHandler<GetAssetsQuery, PagedResponse<IEnumerable<AssetDetailsDto>>>
     {
         private readonly IAssetRepositoryAsync _assetRepository;
         private readonly IModelHelper _modelHelper;
@@ -22,7 +21,7 @@ public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable
             _modelHelper = modelHelper;
         }
 
-        public async Task<PagedResponse<IEnumerable<Entity>>> Handle(GetAssetsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<AssetDetailsDto>>> Handle(GetAssetsQuery request, CancellationToken cancellationToken)
         {
 
             var validFilter = request;
@@ -38,11 +37,11 @@ public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable
                 validFilter.Fields = _modelHelper.GetModelFields<GetAssetsViewModel>();
             }
             // query based on filter
-            var entityCustomers = await _assetRepository.GetPagedAssetReponseAsync(validFilter);
-            var data = entityCustomers.data;
-            RecordsCount recordCount = entityCustomers.recordsCount;
+            var entityAssets = await _assetRepository.GetPagedAssetReponseAsync(validFilter);
+            var data = entityAssets.data;
+            RecordsCount recordCount = entityAssets.recordsCount;
             // response wrapper
-            return new PagedResponse<IEnumerable<Entity>>(data, validFilter.PageNumber, validFilter.PageSize, recordCount);
+            return new PagedResponse<IEnumerable<AssetDetailsDto>>(data, validFilter.PageNumber, validFilter.PageSize, recordCount);
         }
     }
 }

@@ -3,8 +3,8 @@ using ManagamentPias.App.Interfaces.Repositories;
 using ManagamentPias.Infra.Persistence.Contexts;
 using ManagamentPias.Infra.Persistence.Options;
 using ManagamentPias.Infra.Persistence.Repositories;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +12,7 @@ namespace ManagamentPias.Infra.Persistence
 {
     public static class ServiceRegistration
     {
-        public static void AddPersistenceInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static void AddPersistenceInfrastructure(this IServiceCollection services)
         {
 
             services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
@@ -28,11 +28,49 @@ namespace ManagamentPias.Infra.Persistence
                 options.EnableDetailedErrors(databaseOptions.EnableDetailedErrors);
                 options.EnableSensitiveDataLogging(databaseOptions.EnableSensitiveDataLogging);
             });
+
+            services.AddSingleton(serviceProvider =>
+            {
+                var databaseOptions = serviceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
+                var options = new CosmosClientOptions
+                {
+                    // Otras configuraciones opcionales...
+                    SerializerOptions = new CosmosSerializationOptions
+                    {
+                        PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase,
+                        IgnoreNullValues = true
+                    }
+                };
+
+                AppContext.SetSwitch("AzureCosmosDisableNewtonSoftJsonCheck", true);
+                return new CosmosClient(databaseOptions.Account, databaseOptions.Key, options);
+            });
+
+
             #region Repositories
 
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IAssetRepositoryAsync, AssetRepositoryAsync>();
-
+            services.AddScoped<INoteRepository>(s =>
+            {
+                var cosmosClient = s.GetRequiredService<CosmosClient>();
+                var databaseOptions = s.GetService<IOptions<DatabaseOptions>>()!.Value;
+                return new CosmosNoteRepository(
+                    cosmosClient,
+                    databaseOptions.DatabaseName,
+                    databaseOptions.ContainerNotes
+                );
+            });
+            services.AddSingleton<IUserRepository>(s =>
+            {
+                var cosmosClient = s.GetRequiredService<CosmosClient>();
+                var databaseOptions = s.GetService<IOptions<DatabaseOptions>>()!.Value;
+                return new UserRepositoryAsync(
+                    cosmosClient,
+                    databaseOptions.DatabaseName,
+                    databaseOptions.ContainerUsers
+                );
+            });
             #endregion Repositories
         }
     }
