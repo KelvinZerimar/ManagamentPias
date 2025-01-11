@@ -1,6 +1,5 @@
 using ManagamentPias.App;
 using ManagamentPias.Infra.Persistence;
-using ManagamentPias.Infra.Persistence.Contexts;
 using ManagamentPias.Infra.Shared;
 using ManagamentPias.Infra.Shared.Authentication.Settings;
 using ManagamentPias.WebApi.Extensions;
@@ -47,12 +46,12 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
     // for quick database (usually for prototype)
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        // use context
-        dbContext.Database.EnsureCreated();
-    }
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    //    // use context
+    //    dbContext.Database.EnsureCreated();
+    //}
 }
 else
 {
