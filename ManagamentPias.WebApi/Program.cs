@@ -1,9 +1,10 @@
-using ManagamentPias.App;
-using ManagamentPias.Infra.Persistence;
-using ManagamentPias.Infra.Shared;
-using ManagamentPias.Infra.Shared.Authentication.Settings;
-using ManagamentPias.WebApi.Extensions;
-using ManagamentPias.WebApi.Options;
+using ManagementPias.App;
+using ManagementPias.Infra.Persistence;
+using ManagementPias.Infra.Shared;
+using ManagementPias.Infra.Shared.Authentication.Settings;
+using ManagementPias.WebApi.CORS;
+using ManagementPias.WebApi.Extensions;
+using ManagementPias.WebApi.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,8 @@ builder.Services.AddJWTAuthentication(builder.Configuration.GetMyOptions<Authent
 builder.Services.AddApiVersioningExtension();
 // Add authentication
 builder.Services.ConfigureServices(builder.Configuration);
+// CORS
+builder.Services.AddMyCorsConfiguration(builder.Configuration);
 
 var app = builder.Build();
 Log.Information("Application startup middleware registration");
@@ -67,7 +70,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 //Enable CORS
-app.UseCors("AllowAll");
+app.UseCors();
 app.UseSwaggerExtension();
 app.UseErrorHandlingMiddleware();
 app.UseHealthChecks("/health");
