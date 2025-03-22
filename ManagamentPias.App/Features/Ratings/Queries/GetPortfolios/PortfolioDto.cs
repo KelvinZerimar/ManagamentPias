@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Features.Ratings.Queries.GetPortfolios;
+﻿namespace ManagementPias.App.Features.Ratings.Queries.GetPortfolios;
 
 public record PortfolioDto
 {

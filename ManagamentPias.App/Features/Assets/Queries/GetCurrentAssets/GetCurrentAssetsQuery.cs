@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Features.Assets.Queries.GetAssets;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
-using ManagamentPias.Domain.Enums;
+﻿using ManagementPias.App.Features.Assets.Queries.GetAssets;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
+using ManagementPias.Domain.Enums;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Assets.Queries.GetCurrentAssets;
+namespace ManagementPias.App.Features.Assets.Queries.GetCurrentAssets;
 
 public class GetCurrentAssetsQuery : IRequest<Response<IEnumerable<AssetDetailsDto>>>
 {

@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Helpers;
-using ManagamentPias.App.Interfaces;
-using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.App.Helpers;
+using ManagementPias.App.Interfaces;
+using ManagementPias.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace ManagamentPias.App;
+namespace ManagementPias.App;
 
 public static class ServiceExtensions
 {

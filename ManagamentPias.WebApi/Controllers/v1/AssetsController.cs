@@ -1,11 +1,12 @@
 ﻿using Asp.Versioning;
-using ManagamentPias.App.Features.Assets.Commands.CreateAsset;
-using ManagamentPias.App.Features.Assets.Commands.CreateRangeAssets;
-using ManagamentPias.App.Features.Assets.Queries.GetAssets;
-using ManagamentPias.App.Features.Assets.Queries.GetCurrentAssets;
+using ManagementPias.App.Features.Assets.Commands.CreateAsset;
+using ManagementPias.App.Features.Assets.Commands.CreateRangeAssets;
+using ManagementPias.App.Features.Assets.Queries.GetAssets;
+using ManagementPias.App.Features.Assets.Queries.GetAssetsGroupedByDateSituation;
+using ManagementPias.App.Features.Assets.Queries.GetCurrentAssets;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManagamentPias.WebApi.Controllers.v1;
+namespace ManagementPias.WebApi.Controllers.v1;
 
 [ApiVersion("1.0")]
 public class AssetsController : BaseApiController
@@ -80,8 +81,16 @@ public class AssetsController : BaseApiController
     // [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetCurrentAssets([FromQuery] GetCurrentAssetsQuery query)
+    public async Task<IActionResult> GetCurrentAssets()
     {
-        return Ok(await Mediator!.Send(query));
+        return Ok(await Mediator!.Send(new GetCurrentAssetsQuery()));
     }
+
+    [HttpGet("assets-by-date-situation")]
+    public async Task<IActionResult> GetAssetGroupedByDateSituationAsync()
+    {
+        var resp = await Mediator!.Send(new GetAssetsGroupedByDateSituationQuery());
+        return Ok(resp);
+    }
+
 }

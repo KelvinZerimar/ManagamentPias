@@ -1,12 +1,13 @@
 using Asp.Versioning;
-using ManagamentPias.App.Features.Notes.Commands.CreateNote;
-using ManagamentPias.App.Features.Notes.Commands.DeleteNote;
-using ManagamentPias.App.Features.Notes.Queries.GetNoteById;
-using ManagamentPias.App.Features.Notes.Queries.GetNotes;
+using ManagementPias.App.Features.Notes.Commands.CreateNote;
+using ManagementPias.App.Features.Notes.Commands.DeleteNote;
+using ManagementPias.App.Features.Notes.Commands.UpdateNote;
+using ManagementPias.App.Features.Notes.Queries.GetNoteById;
+using ManagementPias.App.Features.Notes.Queries.GetNotes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManagamentPias.WebApi.Controllers.v1;
+namespace ManagementPias.WebApi.Controllers.v1;
 
 [ApiVersion("1.0")]
 public class NotesController : BaseApiController
@@ -46,14 +47,14 @@ public class NotesController : BaseApiController
         return CreatedAtAction(nameof(Post), resp);
     }
 
-    //[HttpPut]
-    //[ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //public async Task<IActionResult> Put(UpdateNoteCommand command)
-    //{
-    //    var resp = await Mediator!.Send(command);
-    //    return NoContent();
-    //}
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Put(UpdateNoteCommand command)
+    {
+        var resp = await Mediator!.Send(command);
+        return NoContent();
+    }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

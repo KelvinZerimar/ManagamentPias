@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Features.Assets.Commands.CreateRangeAssets;
+﻿namespace ManagementPias.App.Features.Assets.Commands.CreateRangeAssets;
 
 public class AssetRequestDto
 {

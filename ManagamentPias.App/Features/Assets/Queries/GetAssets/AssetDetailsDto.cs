@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Features.Assets.Queries.GetAssets;
+﻿namespace ManagementPias.App.Features.Assets.Queries.GetAssets;
 
 public record AssetDetailsDto
 {

@@ -1,6 +1,6 @@
-﻿using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Wrappers;
 
-namespace ManagamentPias.App.Common.Services;
+namespace ManagementPias.App.Common.Services;
 
 public interface ITokenService
 {

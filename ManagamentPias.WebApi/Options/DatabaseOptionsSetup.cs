@@ -1,7 +1,7 @@
-﻿using ManagamentPias.Infra.Persistence.Options;
+﻿using ManagementPias.Infra.Persistence.Options;
 using Microsoft.Extensions.Options;
 
-namespace ManagamentPias.WebApi.Options;
+namespace ManagementPias.WebApi.Options;
 
 public class DatabaseOptionsSetup : IConfigureOptions<DatabaseOptions>
 {

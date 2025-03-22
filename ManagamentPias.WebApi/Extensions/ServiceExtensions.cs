@@ -1,15 +1,15 @@
 ﻿using Asp.Versioning;
-using ManagamentPias.App.Common.Services;
-using ManagamentPias.Infra.Shared.Authentication.Settings;
-using ManagamentPias.Infra.Shared.Services;
-using ManagamentPias.WebApi.Options;
+using ManagementPias.App.Common.Services;
+using ManagementPias.Infra.Shared.Authentication.Settings;
+using ManagementPias.Infra.Shared.Services;
+using ManagementPias.WebApi.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 
-namespace ManagamentPias.WebApi.Extensions;
+namespace ManagementPias.WebApi.Extensions;
 
 public static class ServiceExtensions
 {
@@ -21,7 +21,7 @@ public static class ServiceExtensions
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
-                Title = "Clean Architecture - ManagamentPias.WebApi",
+                Title = "Clean Architecture - ManagementPias.WebApi",
                 Description = "This Api will be responsible for overall data distribution and authorization.",
                 Contact = new OpenApiContact
                 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ManagamentPias.Infra.Shared.Authentication.Settings;
+namespace ManagementPias.Infra.Shared.Authentication.Settings;
 
 public class AuthenticationSettings
 {

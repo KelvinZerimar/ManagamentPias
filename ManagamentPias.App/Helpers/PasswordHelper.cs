@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Helpers;
+﻿namespace ManagementPias.App.Helpers;
 
 public static class PasswordHelper
 {

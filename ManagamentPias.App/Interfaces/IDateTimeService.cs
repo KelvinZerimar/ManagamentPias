@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Interfaces;
+﻿namespace ManagementPias.App.Interfaces;
 
 public interface IDateTimeService
 {

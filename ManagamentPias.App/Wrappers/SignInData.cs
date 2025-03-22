@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Wrappers;
+﻿namespace ManagementPias.App.Wrappers;
 
 public record SignInData
 {

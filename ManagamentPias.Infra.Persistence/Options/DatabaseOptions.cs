@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.Infra.Persistence.Options;
+﻿namespace ManagementPias.Infra.Persistence.Options;
 
 public class DatabaseOptions
 {

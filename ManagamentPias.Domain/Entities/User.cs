@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ManagamentPias.Domain.Entities;
+namespace ManagementPias.Domain.Entities;
 
 public class User
 {

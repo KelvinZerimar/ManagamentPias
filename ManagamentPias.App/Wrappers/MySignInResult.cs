@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Wrappers;
+﻿namespace ManagementPias.App.Wrappers;
 // Used instead of Identity.SignInResult to avoid unnecessary coupling
 // between authentication pipeline participants and Identity.
 public enum MySignInResult

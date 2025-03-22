@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.Infra.Shared.Services;
+﻿namespace ManagementPias.Infra.Shared.Services;
 
 public class DatabaseSeeder
 {

@@ -1,9 +1,9 @@
-﻿using ManagamentPias.App.Common.Services;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Common.Services;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Notes.Queries.GetNotes;
+namespace ManagementPias.App.Features.Notes.Queries.GetNotes;
 
 public class GetNotesQuery : IRequest<Response<IEnumerable<NoteResponseDto>>>
 {

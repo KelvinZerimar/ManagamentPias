@@ -1,6 +1,6 @@
-﻿using ManagamentPias.Domain.Enums;
+﻿using ManagementPias.Domain.Enums;
 
-namespace ManagamentPias.App.Features.Notes.Commands.CreateNote
+namespace ManagementPias.App.Features.Notes.Commands.CreateNote
 {
     public class NoteRequestDto
     {

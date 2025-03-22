@@ -1,6 +1,6 @@
-﻿using ManagamentPias.App.Interfaces;
+﻿using ManagementPias.App.Interfaces;
 
-namespace ManagamentPias.App.Helpers;
+namespace ManagementPias.App.Helpers;
 
 public class ModelHelper : IModelHelper
 {

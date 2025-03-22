@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning;
-using ManagamentPias.App.Features.Users.Commands.RegisterUser;
-using ManagamentPias.App.Features.Users.Queries.Login;
+using ManagementPias.App.Features.Users.Commands.RegisterUser;
+using ManagementPias.App.Features.Users.Queries.Login;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManagamentPias.WebApi.Controllers.v1;
+namespace ManagementPias.WebApi.Controllers.v1;
 
 [ApiVersion("1.0")]
 public class UsersController : BaseApiController
@@ -12,20 +12,40 @@ public class UsersController : BaseApiController
     {
     }
 
+    #region PostGres
     [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginUserQuery query)
+    public async Task<ActionResult> LoginPostGres(PostgresLoginUserQuery query)
     {
-        return Ok(await Mediator!.Send(new LoginUserQuery { Email = query.Email, Password = query.Password }));
+        return Ok(await Mediator!.Send(new PostgresLoginUserQuery { Email = query.Email, Password = query.Password }));
     }
 
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register(RegisterUserCommand command)
+    public async Task<IActionResult> RegisterPostGres(PostgresRegisterUserCommand command)
     {
         var resp = await Mediator!.Send(command);
-        return CreatedAtAction(nameof(Register), resp);
+        return CreatedAtAction(nameof(RegisterPostGres), resp);
     }
+    #endregion
+
+    #region Cosmos
+    [HttpPost("login-cosmos")]
+    public async Task<ActionResult> LoginCosmos(CosmosLoginUserQuery query)
+    {
+        return Ok(await Mediator!.Send(new CosmosLoginUserQuery { Email = query.Email, Password = query.Password }));
+    }
+
+    [HttpPost("register-cosmos")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> RegisterCosmos(CosmosRegisterUserCommand command)
+    {
+        var resp = await Mediator!.Send(command);
+        return CreatedAtAction(nameof(RegisterCosmos), resp);
+    }
+    #endregion
+
     //[HttpPut]
     //[ProducesResponseType(StatusCodes.Status204NoContent)]
     //[ProducesResponseType(StatusCodes.Status400BadRequest)]

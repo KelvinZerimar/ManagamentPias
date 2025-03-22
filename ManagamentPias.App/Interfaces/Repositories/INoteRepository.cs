@@ -1,6 +1,6 @@
-﻿using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.Domain.Entities;
 
-namespace ManagamentPias.App.Interfaces.Repositories;
+namespace ManagementPias.App.Interfaces.Repositories;
 
 public interface INoteRepository
 {

@@ -1,8 +1,8 @@
-﻿using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Notes.Commands.DeleteNote;
+namespace ManagementPias.App.Features.Notes.Commands.DeleteNote;
 
 public class DeleteNoteCommand : IRequest<Response<bool>>
 {

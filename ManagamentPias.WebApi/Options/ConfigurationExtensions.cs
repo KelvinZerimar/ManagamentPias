@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 
-namespace ManagamentPias.WebApi.Options;
+namespace ManagementPias.WebApi.Options;
 
 public static class ConfigurationExtensions
 {

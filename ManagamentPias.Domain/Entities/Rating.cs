@@ -1,7 +1,7 @@
-﻿using ManagamentPias.Domain.Common;
-using ManagamentPias.Domain.Enums;
+﻿using ManagementPias.Domain.Common;
+using ManagementPias.Domain.Enums;
 
-namespace ManagamentPias.Domain.Entities;
+namespace ManagementPias.Domain.Entities;
 
 public class Rating : AuditableBaseEntity
 {

@@ -1,6 +1,6 @@
-﻿using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.Domain.Entities;
 
-namespace ManagamentPias.App.Features.Assets.Queries.GetAssets;
+namespace ManagementPias.App.Features.Assets.Queries.GetAssets;
 
 public class GetAssetsViewModel : Asset
 {

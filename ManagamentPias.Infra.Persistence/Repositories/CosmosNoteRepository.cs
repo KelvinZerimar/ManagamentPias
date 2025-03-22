@@ -1,9 +1,9 @@
-﻿using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.Domain.Entities;
 using Microsoft.Azure.Cosmos;
 using Container = Microsoft.Azure.Cosmos.Container;
 
-namespace ManagamentPias.Infra.Persistence.Repositories;
+namespace ManagementPias.Infra.Persistence.Repositories;
 
 public class CosmosNoteRepository : INoteRepository
 {

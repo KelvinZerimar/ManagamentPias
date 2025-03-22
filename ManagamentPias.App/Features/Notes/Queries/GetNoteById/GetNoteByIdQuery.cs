@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Common.Services;
-using ManagamentPias.App.Features.Notes.Queries.GetNotes;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Common.Services;
+using ManagementPias.App.Features.Notes.Queries.GetNotes;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Notes.Queries.GetNoteById;
+namespace ManagementPias.App.Features.Notes.Queries.GetNoteById;
 
 public class GetNoteByIdQuery : IRequest<Response<NoteResponseDto>>
 {

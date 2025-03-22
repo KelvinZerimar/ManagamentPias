@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using ManagamentPias.App.Common.Services;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
-using ManagamentPias.Domain.Entities;
+using ManagementPias.App.Common.Services;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
+using ManagementPias.Domain.Entities;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Notes.Commands.CreateNote;
+namespace ManagementPias.App.Features.Notes.Commands.CreateNote;
 
 public class CreateNoteCommand : NoteRequestDto, IRequest<Response<NoteRequestDto>>
 {

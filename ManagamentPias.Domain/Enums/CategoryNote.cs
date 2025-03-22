@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.Domain.Enums;
+﻿namespace ManagementPias.Domain.Enums;
 
 public enum CategoryNote
 {

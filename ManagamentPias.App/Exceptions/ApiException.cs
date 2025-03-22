@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace ManagamentPias.App.Exceptions;
+namespace ManagementPias.App.Exceptions;
 
 public class ApiException : Exception
 {

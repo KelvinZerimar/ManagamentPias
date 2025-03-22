@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ManagamentPias.Domain.Enums;
+namespace ManagementPias.Domain.Enums;
 
 public static class EnumExtensions
 {

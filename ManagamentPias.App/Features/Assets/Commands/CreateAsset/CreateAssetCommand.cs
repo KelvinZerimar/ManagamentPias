@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Wrappers;
-using ManagamentPias.Domain.Entities;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Wrappers;
+using ManagementPias.Domain.Entities;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Assets.Commands.CreateAsset;
+namespace ManagementPias.App.Features.Assets.Commands.CreateAsset;
 
 public partial class CreateAssetCommand : Asset, IRequest<Response<Asset>>
 {

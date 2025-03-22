@@ -1,33 +1,31 @@
-﻿using ManagamentPias.App.Interfaces;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.Infra.Persistence.Contexts;
-using ManagamentPias.Infra.Persistence.Options;
-using ManagamentPias.Infra.Persistence.Repositories;
+﻿using ManagementPias.App.Interfaces;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.Infra.Persistence.Options;
+using ManagementPias.Infra.Persistence.Repositories;
 using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace ManagamentPias.Infra.Persistence
+namespace ManagementPias.Infra.Persistence
 {
     public static class ServiceRegistration
     {
         public static void AddPersistenceInfrastructure(this IServiceCollection services)
         {
 
-            services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
-            {
-                var databaseOptions = serviceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
-                options.UseSqlServer(databaseOptions.ConnectionString,
-                    sqlServerAction =>
-                    {
-                        sqlServerAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                        sqlServerAction.EnableRetryOnFailure(databaseOptions.MaxRetryCount); // The Better Way to Configure Entity Framework Core - Milan Jovanovic
-                        sqlServerAction.CommandTimeout(databaseOptions.CommandTimeout); // The Better Way to Configure Entity Framework Core - Milan Jovanovic
-                    });
-                options.EnableDetailedErrors(databaseOptions.EnableDetailedErrors);
-                options.EnableSensitiveDataLogging(databaseOptions.EnableSensitiveDataLogging);
-            });
+            //services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+            //{
+            //    var databaseOptions = serviceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
+            //    options.UseSqlServer(databaseOptions.ConnectionString,
+            //        sqlServerAction =>
+            //        {
+            //            sqlServerAction.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+            //            sqlServerAction.EnableRetryOnFailure(databaseOptions.MaxRetryCount); // The Better Way to Configure Entity Framework Core - Milan Jovanovic
+            //            sqlServerAction.CommandTimeout(databaseOptions.CommandTimeout); // The Better Way to Configure Entity Framework Core - Milan Jovanovic
+            //        });
+            //    options.EnableDetailedErrors(databaseOptions.EnableDetailedErrors);
+            //    options.EnableSensitiveDataLogging(databaseOptions.EnableSensitiveDataLogging);
+            //});
 
             services.AddSingleton(serviceProvider =>
             {
@@ -51,6 +49,7 @@ namespace ManagamentPias.Infra.Persistence
 
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IAssetRepositoryAsync, AssetRepositoryAsync>();
+            services.AddTransient<IPostgresUserRepositoryAsync, PostgresUserRepositoryAsync>();
             services.AddScoped<INoteRepository>(s =>
             {
                 var cosmosClient = s.GetRequiredService<CosmosClient>();
@@ -61,11 +60,11 @@ namespace ManagamentPias.Infra.Persistence
                     databaseOptions.ContainerNotes
                 );
             });
-            services.AddSingleton<IUserRepository>(s =>
+            services.AddSingleton<ICosmosUserRepository>(s =>
             {
                 var cosmosClient = s.GetRequiredService<CosmosClient>();
                 var databaseOptions = s.GetService<IOptions<DatabaseOptions>>()!.Value;
-                return new UserRepositoryAsync(
+                return new CosmosUserRepositoryAsync(
                     cosmosClient,
                     databaseOptions.DatabaseName,
                     databaseOptions.ContainerUsers

@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Common.Services;
-using ManagamentPias.App.Interfaces;
-using ManagamentPias.Infra.Shared.Services;
+﻿using ManagementPias.App.Common.Services;
+using ManagementPias.App.Interfaces;
+using ManagementPias.Infra.Shared.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ManagamentPias.Infra.Shared;
+namespace ManagementPias.Infra.Shared;
 
 public static class ServiceRegistration
 {

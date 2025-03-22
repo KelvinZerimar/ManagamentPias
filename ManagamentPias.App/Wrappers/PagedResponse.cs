@@ -1,6 +1,6 @@
-﻿using ManagamentPias.App.Parameters;
+﻿using ManagementPias.App.Parameters;
 
-namespace ManagamentPias.App.Wrappers;
+namespace ManagementPias.App.Wrappers;
 
 public class PagedResponse<T> : Response<T>
 {

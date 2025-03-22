@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
-using ManagamentPias.App.Features.Ratings.Queries.GetPortfolios;
+using ManagementPias.App.Features.Ratings.Queries.GetPortfolios;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ManagamentPias.WebApi.Controllers.v1;
+namespace ManagementPias.WebApi.Controllers.v1;
 [ApiVersion("1.0")]
 public class RatingsController : BaseApiController
 {

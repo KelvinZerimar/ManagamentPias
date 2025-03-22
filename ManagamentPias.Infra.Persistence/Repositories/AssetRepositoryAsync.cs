@@ -1,32 +1,29 @@
 ﻿using LinqKit;
-using ManagamentPias.App.Features.Assets.Queries.GetAssets;
-using ManagamentPias.App.Interfaces;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Parameters;
-using ManagamentPias.Domain.Entities;
-using ManagamentPias.Domain.Enums;
-using ManagamentPias.Infra.Persistence.Contexts;
+using ManagementPias.App.Features.Assets.Queries.GetAssets;
+using ManagementPias.App.Features.Assets.Queries.GetAssetsGroupedByDateSituation;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Parameters;
+using ManagementPias.Domain.Entities;
+using ManagementPias.Domain.Enums;
+using ManagementPias.Infra.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 
-namespace ManagamentPias.Infra.Persistence.Repositories;
+namespace ManagementPias.Infra.Persistence.Repositories;
 
 public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetRepositoryAsync
 {
     private readonly DbSet<Asset> _repository;
-    private readonly IDataShapeHelper<Asset> _dataShaper;
 
     public AssetRepositoryAsync(ApplicationDbContext dbContext,
-            IDataShapeHelper<Asset> dataShaper,
             ILogger<AssetRepositoryAsync> logger) : base(dbContext)
     {
         _repository = dbContext.Set<Asset>();
-        _dataShaper = dataShaper;
     }
 
 
-    public async Task<(IEnumerable<AssetDetailsDto> data, RecordsCount recordsCount)> GetPagedAssetReponseAsync(GetAssetsQuery requestParameters)
+    public async Task<(IEnumerable<AssetDetailsDto> data, RecordsCount recordsCount)> GetPagedAssetResponseAsync(GetAssetsQuery requestParameters)
     {
         var description = requestParameters.Description;
 
@@ -114,13 +111,50 @@ public class AssetRepositoryAsync : GenericRepositoryAsync<Asset>, IAssetReposit
             .AsNoTracking()
             .AsExpandable();
 
-        var dateSituation = _repository.Max(asset => asset.Rating.DateSituation);
-        var shortDate = dateSituation.Date;
+        var dateSituationUtc = _repository.Max(asset => asset.Rating.DateSituation).ToUniversalTime();
 
         result = result
             .Include(asset => asset.Rating)
-            .Where(asset => asset.Rating.DateSituation.Date == shortDate);
+            .Where(asset => asset.Rating.DateSituation >= dateSituationUtc.Date &&
+                        asset.Rating.DateSituation < dateSituationUtc.Date.AddDays(1));
         var resultData = await result.ToListAsync();
         return resultData;
+    }
+
+    //public async Task<IEnumerable<decimal>> GetValuePatrimonyByMonthAsync(int year)
+    //{
+    //    var result = _repository
+    //        .AsNoTracking()
+    //        .AsExpandable();
+
+    //    var valuePatrimonyByMonth = await result
+    //        .Where(asset => asset.Rating.DateSituation.Year == year)
+    //        .GroupBy(asset => asset.Rating.DateSituation.Month)
+    //        .Select(group => group.Sum(asset => asset.ValuePatrimony))
+    //        .ToListAsync();
+
+    //    return valuePatrimonyByMonth;
+    //}
+
+    public async Task<IEnumerable<AssetChartDto>> GetValuePatrimonyByPortfolioMonthlyAsync(int year)
+    {
+        var result = _repository
+            .AsNoTracking()
+            .AsExpandable();
+
+        var valuePatrimonyByPortfolioMonthly = await result
+            .Include(asset => asset.Rating)
+            .Where(asset => asset.Rating.DateSituation.Year >= year)
+            .GroupBy(asset => new { asset.Rating.Portfolio })
+            .Select(group => new AssetChartDto
+            {
+                Portfolio = group.Key.Portfolio,
+                Assets = group.Select(asset => new AssetValue(
+                    asset.Rating.DateSituation.Year,
+                    asset.Rating.DateSituation.Month,
+                    asset.ValuePatrimony)).ToArray()
+            }).ToArrayAsync();
+
+        return valuePatrimonyByPortfolioMonthly;
     }
 }

@@ -1,6 +1,6 @@
-﻿using ManagamentPias.App.Interfaces;
+﻿using ManagementPias.App.Interfaces;
 
-namespace ManagamentPias.Infra.Shared.Services;
+namespace ManagementPias.Infra.Shared.Services;
 
 public class DateTimeService : IDateTimeService
 {

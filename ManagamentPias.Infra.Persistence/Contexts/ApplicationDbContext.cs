@@ -1,12 +1,11 @@
-﻿using ManagamentPias.App.Interfaces;
-using ManagamentPias.Domain.Common;
-using ManagamentPias.Domain.Entities;
-using ManagamentPias.Infra.Shared.Services;
+﻿using ManagementPias.App.Interfaces;
+using ManagementPias.Domain.Common;
+using ManagementPias.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
 
-namespace ManagamentPias.Infra.Persistence.Contexts;
+namespace ManagementPias.Infra.Persistence.Contexts;
 
 public class ApplicationDbContext : DbContext
 {
@@ -25,6 +24,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Asset> Assets => Set<Asset>();
     public DbSet<Rating> Ratings => Set<Rating>();
+    public DbSet<User> User => Set<User>();
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -47,11 +47,12 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Generate seed data with Bogus
-        var databaseSeeder = new DatabaseSeeder();
+        //var databaseSeeder = new DatabaseSeeder();
 
-        // Configure the tables for the Warehouse
+        // Configure the tables 
         modelBuilder.ApplyConfiguration(new RatingConfiguration());
         modelBuilder.ApplyConfiguration(new AssetConfiguration());
+        //modelBuilder.ApplyConfiguration(new UserConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
@@ -81,5 +82,20 @@ internal class RatingConfiguration : IEntityTypeConfiguration<Rating>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Valuation).IsRequired().HasPrecision(12, 2);
         builder.Property(x => x.DateSituation).IsRequired();
+    }
+}
+
+internal class UserConfiguration : IEntityTypeConfiguration<User>
+{
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.ToTable("User");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Name).IsRequired();
+        builder.Property(x => x.Email).IsRequired();
+        builder.Property(x => x.PasswordHash).IsRequired();
+        builder.Property(x => x.Role);
+        builder.Property(x => x.IsActive);
+        builder.Property(x => x.IsVerified);
     }
 }

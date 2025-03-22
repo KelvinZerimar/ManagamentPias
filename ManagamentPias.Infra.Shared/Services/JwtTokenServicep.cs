@@ -1,11 +1,11 @@
-﻿using ManagamentPias.App.Common.Services;
-using ManagamentPias.App.Wrappers;
-using ManagamentPias.Infra.Shared.Authentication.Settings;
+﻿using ManagementPias.App.Common.Services;
+using ManagementPias.App.Wrappers;
+using ManagementPias.Infra.Shared.Authentication.Settings;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace ManagamentPias.Infra.Shared.Services;
+namespace ManagementPias.Infra.Shared.Services;
 
 public class JwtTokenService : ITokenService
 {

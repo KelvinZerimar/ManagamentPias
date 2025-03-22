@@ -1,6 +1,7 @@
-﻿namespace ManagamentPias.Domain.Common;
+﻿namespace ManagementPias.Domain.Common;
 
 public abstract class BaseEntity
 {
-    public virtual Guid Id { get; set; } = Guid.NewGuid();
+    public virtual int Id { get; set; }
+    //public virtual Guid Id { get; set; } = Guid.NewGuid();
 }

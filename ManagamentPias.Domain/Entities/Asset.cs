@@ -1,6 +1,6 @@
-﻿using ManagamentPias.Domain.Common;
+﻿using ManagementPias.Domain.Common;
 
-namespace ManagamentPias.Domain.Entities;
+namespace ManagementPias.Domain.Entities;
 
 public class Asset : AuditableBaseEntity
 {
@@ -10,6 +10,6 @@ public class Asset : AuditableBaseEntity
     }
 
     public decimal NumUnit { get; set; }
-    public Guid RatingId { get; set; }
+    public int RatingId { get; set; }
     public Rating Rating { get; set; } = null!;
 }

@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Parameters;
+﻿namespace ManagementPias.App.Parameters;
 
 public class PagingParameter
 {

@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.Domain.Common;
+﻿namespace ManagementPias.Domain.Common;
 
 public abstract class AuditableBaseEntity : BaseEntity
 {
@@ -6,7 +6,4 @@ public abstract class AuditableBaseEntity : BaseEntity
     public DateTime Created { get; set; }
     public string? LastModifiedBy { get; init; }
     public DateTime? LastModified { get; set; }
-
-
-
 }

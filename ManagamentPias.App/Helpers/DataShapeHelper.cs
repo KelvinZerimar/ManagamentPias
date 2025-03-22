@@ -1,8 +1,8 @@
-﻿using ManagamentPias.App.Interfaces;
-using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.App.Interfaces;
+using ManagementPias.Domain.Entities;
 using System.Reflection;
 
-namespace ManagamentPias.App.Helpers;
+namespace ManagementPias.App.Helpers;
 
 public class DataShapeHelper<T> : IDataShapeHelper<T>
 {

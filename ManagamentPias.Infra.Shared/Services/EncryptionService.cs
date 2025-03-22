@@ -1,8 +1,8 @@
-﻿using ManagamentPias.App.Common.Services;
+﻿using ManagementPias.App.Common.Services;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ManagamentPias.Infra.Shared.Services;
+namespace ManagementPias.Infra.Shared.Services;
 
 public class EncryptionService : IEncryptionService
 {

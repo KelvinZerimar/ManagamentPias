@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Exceptions;
-using ManagamentPias.App.Interfaces;
-using ManagamentPias.Infra.Persistence.Contexts;
+﻿using ManagementPias.App.Exceptions;
+using ManagementPias.App.Interfaces;
+using ManagementPias.Infra.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 
-namespace ManagamentPias.Infra.Persistence.Repositories;
+namespace ManagementPias.Infra.Persistence.Repositories;
 
 public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : class
 {

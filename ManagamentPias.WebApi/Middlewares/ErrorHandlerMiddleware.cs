@@ -1,9 +1,9 @@
-﻿using ManagamentPias.App.Exceptions;
-using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Exceptions;
+using ManagementPias.App.Wrappers;
 using System.Net;
 using System.Text.Json;
 
-namespace ManagamentPias.WebApi.Middlewares;
+namespace ManagementPias.WebApi.Middlewares;
 
 
 public class ErrorHandlerMiddleware

@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Features.Notes.Queries.GetNotes;
+﻿namespace ManagementPias.App.Features.Notes.Queries.GetNotes;
 
 public record NoteResponseDto
 {

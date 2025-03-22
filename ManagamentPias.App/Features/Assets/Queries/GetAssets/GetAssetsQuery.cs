@@ -1,10 +1,10 @@
-﻿using ManagamentPias.App.Interfaces;
-using ManagamentPias.App.Interfaces.Repositories;
-using ManagamentPias.App.Parameters;
-using ManagamentPias.App.Wrappers;
+﻿using ManagementPias.App.Interfaces;
+using ManagementPias.App.Interfaces.Repositories;
+using ManagementPias.App.Parameters;
+using ManagementPias.App.Wrappers;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Assets.Queries.GetAssets;
+namespace ManagementPias.App.Features.Assets.Queries.GetAssets;
 
 public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable<AssetDetailsDto>>>
 {
@@ -37,7 +37,7 @@ public class GetAssetsQuery : QueryParameter, IRequest<PagedResponse<IEnumerable
                 validFilter.Fields = _modelHelper.GetModelFields<GetAssetsViewModel>();
             }
             // query based on filter
-            var entityAssets = await _assetRepository.GetPagedAssetReponseAsync(validFilter);
+            var entityAssets = await _assetRepository.GetPagedAssetResponseAsync(validFilter);
             var data = entityAssets.data;
             RecordsCount recordCount = entityAssets.recordsCount;
             // response wrapper

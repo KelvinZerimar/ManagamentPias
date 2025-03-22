@@ -1,4 +1,4 @@
-﻿namespace ManagamentPias.App.Common.Services;
+﻿namespace ManagementPias.App.Common.Services;
 
 public interface IEncryptionService
 {

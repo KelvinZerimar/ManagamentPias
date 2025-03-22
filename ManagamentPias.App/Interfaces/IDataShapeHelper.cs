@@ -1,6 +1,6 @@
-﻿using ManagamentPias.Domain.Entities;
+﻿using ManagementPias.Domain.Entities;
 
-namespace ManagamentPias.App.Interfaces;
+namespace ManagementPias.App.Interfaces;
 
 public interface IDataShapeHelper<T>
 {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace ManagamentPias.Domain.Entities;
+namespace ManagementPias.Domain.Entities;
 
 public class Note
 {
@@ -10,6 +10,17 @@ public class Note
 
     private Note(string category, string title, string richTextContent, DateTime createDate, DateTime? modifyDate, bool isActive)
     {
+        Category = category;
+        Title = title;
+        RichTextContent = richTextContent;
+        CreateDate = createDate;
+        ModifyDate = modifyDate;
+        IsActive = isActive;
+    }
+
+    private Note(Guid id, string category, string title, string richTextContent, DateTime createDate, DateTime? modifyDate, bool isActive)
+    {
+        Id = id;
         Category = category;
         Title = title;
         RichTextContent = richTextContent;
@@ -42,6 +53,11 @@ public class Note
     static public Note Create(string category, string title, string richTextContent, DateTime createDate, DateTime? modifyDate, bool isActive)
     {
         return new Note(category, title, richTextContent, createDate, modifyDate, isActive);
+    }
+
+    static public Note UpdateNoteAsync(Guid id, string category, string title, string richTextContent, DateTime createDate, DateTime? modifyDate, bool isActive)
+    {
+        return new Note(id, category, title, richTextContent, createDate, modifyDate, isActive);
     }
 }
 

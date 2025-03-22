@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ManagamentPias.WebApi.Controllers;
+namespace ManagementPias.WebApi.Controllers;
 public class MetaController : BaseApiController
 {
     [HttpGet("/info")]

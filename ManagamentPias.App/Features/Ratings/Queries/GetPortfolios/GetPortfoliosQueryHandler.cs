@@ -1,8 +1,8 @@
-﻿using ManagamentPias.App.Wrappers;
-using ManagamentPias.Domain.Enums;
+﻿using ManagementPias.App.Wrappers;
+using ManagementPias.Domain.Enums;
 using MediatR;
 
-namespace ManagamentPias.App.Features.Ratings.Queries.GetPortfolios;
+namespace ManagementPias.App.Features.Ratings.Queries.GetPortfolios;
 
 public class GetPortfoliosQuery : IRequest<Response<IEnumerable<PortfolioDto>>>
 {
