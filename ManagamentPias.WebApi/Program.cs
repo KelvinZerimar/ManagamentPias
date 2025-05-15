@@ -8,10 +8,22 @@ using ManagementPias.WebApi.CORS;
 using ManagementPias.WebApi.Extensions;
 using ManagementPias.WebApi.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Logs
+builder.Logging.ClearProviders()
+    .AddConsole(options =>
+    {
+        options.FormatterName = "default";
+    })
+    .AddDebug()
+    .AddConfiguration(builder.Configuration.GetSection("Logging"))
+    .AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+
 
 Log.Information("Application startup services registration");
 // Add configuration to the DI container
@@ -20,10 +32,9 @@ builder.Services.AddSingleton(builder.Configuration);
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 builder.Services.AddApplicationLayer();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
 {
-    var serviceProvider = builder.Services.BuildServiceProvider();
-    var databaseOptions = serviceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
+    var databaseOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
     if (databaseOptions is null)
     {
         throw new ArgumentNullException(nameof(databaseOptions));
@@ -60,6 +71,22 @@ builder.Services.AddApiVersioningExtension();
 builder.Services.ConfigureServices(builder.Configuration);
 // CORS
 builder.Services.AddMyCorsConfiguration(builder.Configuration);
+// Cache
+builder.Services.AddHybridCache(option =>
+{
+    option.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        LocalCacheExpiration = TimeSpan.FromMinutes(10),
+        Expiration = TimeSpan.FromMinutes(30),
+        //Flags = HybridCacheEntryFlags.DisableLocalCache | HybridCacheEntryFlags.DisableCompression
+    };
+});
+
+builder.Services.AddResponseCaching(options =>
+{
+    options.UseCaseSensitivePaths = true;
+    options.SizeLimit = 1024 * 1024 * 100; // 100 MB
+});
 
 var app = builder.Build();
 Log.Information("Application startup middleware registration");
@@ -84,7 +111,7 @@ if (app.Environment.IsDevelopment())
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate(); // Aplica las migraciones pendientes
+        //dbContext.Database.Migrate(); // Aplica las migraciones pendientes
     }
 }
 else
@@ -109,3 +136,4 @@ app.UseHealthChecks("/health");
 Log.Information("Application Starting");
 
 app.Run();
+

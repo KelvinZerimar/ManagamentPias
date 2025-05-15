@@ -28,7 +28,7 @@ public class LoginUserFunction : Abstraction
         //dynamic data = JsonConvert.DeserializeObject(requestBody);
 
         return await PostResponse(
-            req, req.Convert<CosmosLoginUserQuery>()
+            req, req.Convert<PostgresLoginUserQuery>()
         );
     }
 

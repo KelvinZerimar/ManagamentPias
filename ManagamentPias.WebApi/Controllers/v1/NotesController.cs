@@ -6,17 +6,13 @@ using ManagementPias.App.Features.Notes.Queries.GetNoteById;
 using ManagementPias.App.Features.Notes.Queries.GetNotes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace ManagementPias.WebApi.Controllers.v1;
 
 [ApiVersion("1.0")]
-public class NotesController : BaseApiController
+public class NotesController(ILogger<AssetsController> logger, HybridCache hybridCache) : BaseApiController
 {
-    public NotesController()
-    {
-
-    }
-
     /// <summary>
     /// Gets a list of Notes 
     /// </summary>
@@ -25,9 +21,18 @@ public class NotesController : BaseApiController
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [Authorize]
-    public async Task<ActionResult> Get([FromQuery] GetNotesQuery filter)
+    public async Task<ActionResult> Get([FromQuery] GetNotesQuery filter, CancellationToken ct)
     {
-        return Ok(await Mediator!.Send(filter));
+        logger.LogInformation(message: "Request received to GetNotes.");
+        var result = await hybridCache.GetOrCreateAsync("notes", async ct =>
+        {
+            return await Mediator!.Send(filter, ct);
+        },
+        tags: ["MyNotes"],
+        cancellationToken: ct);
+        logger.LogInformation(message: "Notes retrieved successfully.");
+        return Ok(result);
+        //return Ok(await Mediator!.Send(filter));
     }
 
     [HttpGet("{id}")]

@@ -14,7 +14,11 @@ public class AuthenticationSettings
     public string JwtSigningKeyBase64
     {
         get => _jwtSigningKeyBase64;
-        init { _jwtSigningKeyBase64 = value; JwtSigningKey = Convert.FromBase64String(value); }
+        init
+        {
+            _jwtSigningKeyBase64 = value;
+            JwtSigningKey = Convert.FromBase64String(value);
+        }
     }
     private string _jwtSigningKeyBase64 = default!;
 

@@ -31,9 +31,10 @@ public class GetAssetsGroupedByDateSituationQuery : IRequest<Response<responseHi
             });
 
             var resp = assetChartDtoList.Select(a => a.Assets.OrderBy(x => x.Year).ThenBy(x => x.Month));
-            var dateAll = resp.First().Select(x => new[] { $"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x.Month).Substring(0, 1)
-                .ToUpper()}{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x.Month).Substring(1)} {x.Year}" })
-                .ToArray();
+            var dateAll = resp.First()
+                            .Select(x => new[] { $"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x.Month).Substring(0, 1).ToUpper()}" +
+                                                 $"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x.Month).Substring(1)} {x.Year}" }
+                            ).ToArray();
 
             var response = assetChartDtoList.Select(a => new PortfolioValuePatrimonyDto(
                 Portafolio: a.Portfolio,

@@ -2,21 +2,27 @@
 using ManagementPias.App.Features.Users.Commands.RegisterUser;
 using ManagementPias.App.Features.Users.Queries.Login;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace ManagementPias.WebApi.Controllers.v1;
 
 [ApiVersion("1.0")]
-public class UsersController : BaseApiController
+public class UsersController(ILogger<AssetsController> logger, HybridCache hybridCache) : BaseApiController
 {
-    public UsersController()
-    {
-    }
-
     #region PostGres
     [HttpPost("login")]
-    public async Task<ActionResult> LoginPostGres(PostgresLoginUserQuery query)
+    public async Task<ActionResult> LoginPostGres(PostgresLoginUserQuery query, CancellationToken ct)
     {
-        return Ok(await Mediator!.Send(new PostgresLoginUserQuery { Email = query.Email, Password = query.Password }));
+        logger.LogInformation(message: "Request received to LoginPostGres.");
+        var result = await hybridCache.GetOrCreateAsync("login-postgres", async ct =>
+        {
+            return await Mediator!.Send(query, ct);
+        },
+        tags: ["LoginPostgres"],
+        cancellationToken: ct);
+        logger.LogInformation(message: "LoginPostGres retrieved successfully.");
+        return Ok(result);
+        //return Ok(await Mediator!.Send(new PostgresLoginUserQuery { Email = query.Email, Password = query.Password }));
     }
 
     [HttpPost("register")]

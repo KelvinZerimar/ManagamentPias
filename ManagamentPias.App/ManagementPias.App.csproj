@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Users\Queries\GetUserById\**" />
+    <EmbeddedResource Remove="Features\Users\Queries\GetUserById\**" />
+    <None Remove="Features\Users\Queries\GetUserById\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="FluentValidation" Version="11.10.0" />
@@ -18,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ManagamentPias.Domain\ManagementPias.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Users\Queries\GetUserById\" />
   </ItemGroup>
 
 </Project>

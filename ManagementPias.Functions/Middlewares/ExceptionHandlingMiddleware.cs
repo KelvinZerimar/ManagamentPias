@@ -31,7 +31,7 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
             while (tracer is not null)
             {
                 trace.Add(tracer!.Message);
-                tracer = tracer!.InnerException;
+                tracer = tracer.InnerException;
             }
 
             // return this response with status code 500
@@ -39,6 +39,9 @@ public class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
             if (httpReqData != null)
             {
                 var newHttpResponse = httpReqData.CreateResponse(HttpStatusCode.InternalServerError);
+
+                newHttpResponse.Headers.Remove("Content-Type");
+
                 await newHttpResponse.WriteAsJsonAsync(new
                 {
                     success = false,

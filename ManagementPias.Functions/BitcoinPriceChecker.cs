@@ -1,26 +1,28 @@
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Logging;
-
 namespace ManagementPias.Functions
 {
-    public class BitcoinPriceChecker
-    {
-        private readonly ILogger _logger;
+    //public class BitcoinPriceChecker
+    //{
+    //    private readonly HttpClient _httpClient;
+    //    private readonly ILogger _logger;
 
-        public BitcoinPriceChecker(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory.CreateLogger<BitcoinPriceChecker>();
-        }
+    //    public BitcoinPriceChecker(IHttpClientFactory factory, ILoggerFactory loggerFactory)
+    //    {
+    //        _httpClient = factory.CreateClient(nameof(BitcoinPriceChecker));
+    //        _logger = loggerFactory.CreateLogger<BitcoinPriceChecker>();
+    //    }
 
-        [Function("BitcoinPriceChecker")]
-        public void Run([TimerTrigger("* * * * * *")] TimerInfo myTimer)
-        {
-            _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+    //    [Function("BitcoinPriceChecker")]
+    //    public void Run([TimerTrigger("* * * * * *")] TimerInfo myTimer)
+    //    {
+    //        _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
-            if (myTimer.ScheduleStatus is not null)
-            {
-                _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
-            }
-        }
-    }
+    //        //string apiResponse = _httpClient.GetStringAsync("https://api.coindesk.com/v1/bpi/currentprice/BTC.json").Result;
+    //        //_logger.LogInformation($"Bitcoin price: {apiResponse}");
+
+    //        if (myTimer.ScheduleStatus is not null)
+    //        {
+    //            _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
+    //        }
+    //    }
+    //}
 }
