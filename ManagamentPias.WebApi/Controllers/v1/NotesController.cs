@@ -4,6 +4,7 @@ using ManagementPias.App.Features.Notes.Commands.DeleteNote;
 using ManagementPias.App.Features.Notes.Commands.UpdateNote;
 using ManagementPias.App.Features.Notes.Queries.GetNoteById;
 using ManagementPias.App.Features.Notes.Queries.GetNotes;
+using ManagementPias.App.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Hybrid;
@@ -28,7 +29,7 @@ public class NotesController(ILogger<AssetsController> logger, HybridCache hybri
         {
             return await Mediator!.Send(filter, ct);
         },
-        tags: ["MyNotes"],
+        tags: ["my-notes"],
         cancellationToken: ct);
         logger.LogInformation(message: "Notes retrieved successfully.");
         return Ok(result);
@@ -37,27 +38,40 @@ public class NotesController(ILogger<AssetsController> logger, HybridCache hybri
 
     [HttpGet("{id}")]
     [Authorize]
-    public async Task<ActionResult> Get(Guid id, [FromQuery] string partitionKey)
+    public async Task<ActionResult> Get(Guid id, [FromQuery] string partitionKey, CancellationToken ct)
     {
-        return Ok(await Mediator!.Send(new GetNoteByIdQuery { Id = id, PartitionKey = partitionKey }));
+        var note = await hybridCache.GetOrCreateAsync<Response<NoteResponseDto>>(
+            $"note-{id}",
+            async token =>
+            {
+                return await Mediator!.Send(new GetNoteByIdQuery { Id = id, PartitionKey = partitionKey }, token);
+            },
+            cancellationToken: ct
+        );
+
+        return note is null ? NotFound() : Ok(note);
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Authorize]
-    public async Task<IActionResult> Post(CreateNoteCommand command)
+    public async Task<IActionResult> Post(CreateNoteCommand command, CancellationToken ct)
     {
         var resp = await Mediator!.Send(command);
+        await hybridCache.RemoveByTagAsync($"my-notes", ct);
         return CreatedAtAction(nameof(Post), resp);
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Put(UpdateNoteCommand command)
+    public async Task<IActionResult> Put(UpdateNoteCommand command, CancellationToken ct)
     {
         var resp = await Mediator!.Send(command);
+        // Then remove from cache
+        //await hybridCache.RemoveAsync($"note-{command.Id}");
+        await hybridCache.RemoveByTagAsync($"my-notes", ct);
         return NoContent();
     }
 
@@ -65,10 +79,13 @@ public class NotesController(ILogger<AssetsController> logger, HybridCache hybri
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Authorize]
-    public async Task<IActionResult> Delete(Guid id, [FromQuery] string partitionKey)
+    public async Task<IActionResult> Delete(Guid id, [FromQuery] string partitionKey, CancellationToken ct)
     {
         var command = new DeleteNoteCommand { Id = id, PartitionKey = partitionKey };
         var resp = await Mediator!.Send(command);
+        // Then remove from cache
+        await hybridCache.RemoveAsync($"note-{id}");
+
         return NoContent();
     }
 }

@@ -74,9 +74,14 @@ builder.Services.AddMyCorsConfiguration(builder.Configuration);
 // Cache
 builder.Services.AddHybridCache(option =>
 {
+    // Maximum size of cached items
+    option.MaximumPayloadBytes = 1024 * 1024 * 10; // 10MB
+    option.MaximumKeyLength = 512;
+
+    // Default timeouts
     option.DefaultEntryOptions = new HybridCacheEntryOptions
     {
-        LocalCacheExpiration = TimeSpan.FromMinutes(10),
+        LocalCacheExpiration = TimeSpan.FromMinutes(30),
         Expiration = TimeSpan.FromMinutes(30),
         //Flags = HybridCacheEntryFlags.DisableLocalCache | HybridCacheEntryFlags.DisableCompression
     };

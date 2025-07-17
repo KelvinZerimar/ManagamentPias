@@ -40,9 +40,10 @@ public class AssetsController(ILogger<AssetsController> logger, HybridCache hybr
     // [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> BulkInsert(CreateRangeAssetCommand command)
+    public async Task<IActionResult> BulkInsert(CreateRangeAssetCommand command, CancellationToken ct)
     {
         var resp = await Mediator!.Send(command);
+        await hybridCache.RemoveByTagAsync($"pias-axa", ct);
         return CreatedAtAction(nameof(Post), resp);
     }
 
@@ -58,7 +59,7 @@ public class AssetsController(ILogger<AssetsController> logger, HybridCache hybr
             var query = new GetCurrentAssetsQuery();
             return await Mediator!.Send(query, ct);
         },
-         tags: ["piasAxa"],
+         tags: ["pias-axa"],
          cancellationToken: ct);
 
         if (result == null)
@@ -80,7 +81,7 @@ public class AssetsController(ILogger<AssetsController> logger, HybridCache hybr
             var query = new GetAssetsGroupedByDateSituationQuery();
             return await Mediator!.Send(query, ct);
         },
-         tags: ["piasAxa"],
+         tags: ["pias-axa"],
          cancellationToken: ct);
 
         if (resp == null)
